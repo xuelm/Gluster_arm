@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+set -eux
+
+LVM_FILTER=${LVM_FILTER:-}
+
+if [[ "" != "$LVM_FILTER" ]]; then
+    sed -i -z "s~default value\.\n\s\+# filter = \[ .\+ \]\n~\n        filter = [ \"${LVM_FILTER}\" ]~" /etc/lvm/lvm.conf
+fi
