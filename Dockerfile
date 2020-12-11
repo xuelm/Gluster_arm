@@ -1,4 +1,4 @@
-FROM bitnami/minideb:buster
+FROM arm64v8/ubuntu:xenial
 
 RUN apt-get update && \
     apt-get -y install make automake autoconf libtool flex bison      \
@@ -44,7 +44,7 @@ RUN export PATH=$GOPATH/bin:$GOROOT/bin:$PATH ; \
 COPY exporter.toml /build/etc/gluster-exporter/gluster-exporter.toml
 #COPY run.sh /build
 
-FROM bitnami/minideb:buster
+FROM arm64v8/ubuntu:xenial
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.0.0.1/s6-overlay-amd64.tar.gz /tmp/
 RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C /
@@ -66,6 +66,7 @@ ENV GLUSTERD_OPTIONS="" LOG_LEVEL="INFO"
 
 ADD services.d /etc/services.d
 ADD cont-init.d /etc/cont-init.d
+ADD qemu-aarch64-static /usr/bin
 
 ENTRYPOINT ["/init"]
 CMD ["sh", "-c", "/sbin/glusterd -N --log-file=- --log-level=$LOG_LEVEL $GLUSTERD_OPTIONS"]
